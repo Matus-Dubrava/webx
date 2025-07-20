@@ -36,3 +36,29 @@ func TestConfigPassRulesInvalid1(t *testing.T) {
 		t.Fatalf("expected to fail to parse config file")
 	}
 }
+func TestValidGlobalSection(t *testing.T) {
+	confpath := "../testdata/configs/valid_global_section.toml"
+	conf, err := ParseConfig(confpath)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expected_addr := "127.0.0.1"
+	if conf.Global.Listener_addr != expected_addr {
+		t.Fatalf("invalid listener address; expected %s, got %s", expected_addr, conf.Global.Listener_addr)
+	}
+
+	expected_port := 8080
+	if conf.Global.Listener_port != expected_port {
+		t.Fatalf("invalid listener port; expected %d, got %d", expected_port, conf.Global.Listener_port)
+	}
+}
+
+func TestGlobalSection(t *testing.T) {
+	confpath := "../testdata/configs/global_missing_fields.toml"
+	_, err := ParseConfig(confpath)
+
+	if err == nil {
+		t.Fatalf("expected to fail when global fields are missing")
+	}
+}

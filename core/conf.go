@@ -28,6 +28,18 @@ type Config struct {
 	PassRules []ProxyPassRule `toml:"proxy_pass"`
 }
 
+func ValidateGlobalSection(conf *Config) error {
+	if conf.Global.Listener_addr == "" {
+		return fmt.Errorf("invalid config: missing 'listener_address' field")
+	}
+
+	if conf.Global.Listener_port == 0 {
+		return fmt.Errorf("invalid config: mssing 'listener_port' field or port is 0")
+	}
+
+	return nil
+}
+
 func ValidatePassRule(rule *ProxyPassRule) error {
 	if rule.Spath == "" {
 		return fmt.Errorf("invalid proxy_pass: missing 'source_path' field; rule: %s", rule.ToString())
@@ -55,6 +67,10 @@ func ParseConfig(filepath string) (*Config, error) {
 		if err := ValidatePassRule(&rule); err != nil {
 			return &Config{}, err
 		}
+	}
+
+	if err := ValidateGlobalSection(&conf); err != nil {
+		return &Config{}, err
 	}
 
 	return &conf, nil

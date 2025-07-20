@@ -1,6 +1,4 @@
 [global]
-listener_address = "127.0.0.1"
-listener_port = 8080
 
 [[proxy_pass]]
 source_path = "/api"
@@ -10,3 +8,6 @@ target_addr = "127.0.0.1"
 
 [[proxy_pass]]
 source_path = "/users"
+target_path = "/users"
+target_port = 9000
+target_addr = "10.0.0.1"
