@@ -22,6 +22,7 @@ func (rule *ProxyPassRule) ToString() string {
 type ConfigGlobal struct {
 	Listener_host string `toml:"listener_host"`
 	Listener_port int    `toml:"listener_port"`
+	PingInterval  int    `toml:"ping_interval"`
 }
 
 type Config struct {
@@ -99,13 +100,14 @@ func ParseConfig(filepath string) (*Config, error) {
 
 func (conf *Config) Print() {
 	if conf == nil {
-		log.Println("error: can' print config; config is nil")
+		log.Println("error: can't print config; config is nil")
 		return
 	}
 
 	fmt.Println("[config]")
 	fmt.Printf("[global.listener_host] = %s\n", conf.Global.Listener_host)
 	fmt.Printf("[global.listener_port] = %d\n", conf.Global.Listener_port)
+	fmt.Printf("[global.ping_interval] = %d\n", conf.Global.PingInterval)
 	fmt.Println("[proxy pass rules]")
 	for i, rule := range conf.PassRules {
 		fmt.Printf("rule %d: %s\n", i+1, rule.ToString())

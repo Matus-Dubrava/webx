@@ -1,3 +1,5 @@
 .vscode
+.mypy_cache
+tools/__pycache__
 
 main.go.backup
