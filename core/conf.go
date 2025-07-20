@@ -10,16 +10,16 @@ import (
 type ProxyPassRule struct {
 	Spath string `toml:"source_path"`
 	Tpath string `toml:"target_path"`
-	Taddr string `toml:"target_addr"`
+	Thost string `toml:"target_host"`
 	Tport int    `toml:"target_port"`
 }
 
 func (rule *ProxyPassRule) ToString() string {
-	return fmt.Sprintf("source_path: %s, target_path: %s, target_addr: %s, target_port: %d", rule.Spath, rule.Tpath, rule.Taddr, rule.Tport)
+	return fmt.Sprintf("source_path: %s, target_path: %s, target_host: %s, target_port: %d", rule.Spath, rule.Tpath, rule.Thost, rule.Tport)
 }
 
 type ConfigGlobal struct {
-	Listener_addr string `toml:"listener_address"`
+	Listener_host string `toml:"listener_host"`
 	Listener_port int    `toml:"listener_port"`
 }
 
@@ -29,8 +29,8 @@ type Config struct {
 }
 
 func ValidateGlobalSection(conf *Config) error {
-	if conf.Global.Listener_addr == "" {
-		return fmt.Errorf("invalid config: missing 'listener_address' field")
+	if conf.Global.Listener_host == "" {
+		return fmt.Errorf("invalid config: missing 'listener_host' field")
 	}
 
 	if conf.Global.Listener_port == 0 {
@@ -47,8 +47,8 @@ func ValidatePassRule(rule *ProxyPassRule) error {
 	if rule.Tpath == "" {
 		return fmt.Errorf("invalid proxy_pass: missing 'target_path' field; rule: %s", rule.ToString())
 	}
-	if rule.Taddr == "" {
-		return fmt.Errorf("invalid proxy_pass: missing 'target_addr' field; rule: %s", rule.ToString())
+	if rule.Thost == "" {
+		return fmt.Errorf("invalid proxy_pass: missing 'target_host' field; rule: %s", rule.ToString())
 	}
 	if rule.Tport == 0 {
 		return fmt.Errorf("invalid proxy_pass: missing 'target_port' field or field is 0; rule: %s", rule.ToString())
@@ -100,7 +100,7 @@ func (conf *Config) Print() {
 	}
 
 	fmt.Println("[config]")
-	fmt.Printf("[global.listener_addr] = %s\n", conf.Global.Listener_addr)
+	fmt.Printf("[global.listener_host] = %s\n", conf.Global.Listener_host)
 	fmt.Printf("[global.listener_port] = %d\n", conf.Global.Listener_port)
 	fmt.Println("[proxy pass rules]")
 	for i, rule := range conf.PassRules {

@@ -17,8 +17,8 @@ func TestConfigPassRules(t *testing.T) {
 	}
 
 	expected := []ProxyPassRule{
-		{Spath: "/api", Tpath: "/", Taddr: "127.0.0.1", Tport: 8000},
-		{Spath: "/users", Tpath: "/users", Taddr: "10.0.0.1", Tport: 9000},
+		{Spath: "/api", Tpath: "/", Thost: "127.0.0.1", Tport: 8000},
+		{Spath: "/users", Tpath: "/users", Thost: "10.0.0.1", Tport: 9000},
 	}
 
 	for i := range expected {
@@ -54,8 +54,8 @@ func TestValidGlobalSection(t *testing.T) {
 	}
 
 	expected_addr := "127.0.0.1"
-	if conf.Global.Listener_addr != expected_addr {
-		t.Fatalf("invalid listener address; expected %s, got %s", expected_addr, conf.Global.Listener_addr)
+	if conf.Global.Listener_host != expected_addr {
+		t.Fatalf("invalid listener address; expected %s, got %s", expected_addr, conf.Global.Listener_host)
 	}
 
 	expected_port := 8080
