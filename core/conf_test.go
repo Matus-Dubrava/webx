@@ -36,6 +36,16 @@ func TestConfigPassRulesInvalid1(t *testing.T) {
 		t.Fatalf("expected to fail to parse config file")
 	}
 }
+
+func TestDuplicatePassRules(t *testing.T) {
+	confpath := "../testdata/configs/duplicate_pass_rules.toml"
+	_, err := ParseConfig(confpath)
+
+	if err == nil {
+		t.Fatalf("expected to fail when duplicate pass rules are detected")
+	}
+}
+
 func TestValidGlobalSection(t *testing.T) {
 	confpath := "../testdata/configs/valid_global_section.toml"
 	conf, err := ParseConfig(confpath)

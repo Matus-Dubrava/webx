@@ -57,16 +57,33 @@ func ValidatePassRule(rule *ProxyPassRule) error {
 	return nil
 }
 
+func ValidatePassRules(conf *Config) error {
+	paths := make(map[string]struct{})
+
+	for _, rule := range conf.PassRules {
+		// Ensure that there are no multiple rules with the same source_path
+		if _, exists := paths[rule.Spath]; exists {
+			return fmt.Errorf("duplicate source path in rule %s", rule.ToString())
+		}
+
+		paths[rule.Spath] = struct{}{}
+
+		if err := ValidatePassRule(&rule); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func ParseConfig(filepath string) (*Config, error) {
 	var conf Config
 	if _, err := toml.DecodeFile(filepath, &conf); err != nil {
 		return &Config{}, err
 	}
 
-	for _, rule := range conf.PassRules {
-		if err := ValidatePassRule(&rule); err != nil {
-			return &Config{}, err
-		}
+	if err := ValidatePassRules(&conf); err != nil {
+		return &Config{}, err
 	}
 
 	if err := ValidateGlobalSection(&conf); err != nil {
