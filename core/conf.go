@@ -8,14 +8,15 @@ import (
 )
 
 type ProxyPassRule struct {
-	Spath string `toml:"source_path"`
-	Tpath string `toml:"target_path"`
-	Thost string `toml:"target_host"`
-	Tport int    `toml:"target_port"`
+	Spath  string `toml:"source_path"`
+	Tpath  string `toml:"target_path"`
+	Thost  string `toml:"target_host"`
+	Tport  int    `toml:"target_port"`
+	HcPath string `toml:"target_healthcheck_path"`
 }
 
 func (rule *ProxyPassRule) ToString() string {
-	return fmt.Sprintf("source_path: %s, target_path: %s, target_host: %s, target_port: %d", rule.Spath, rule.Tpath, rule.Thost, rule.Tport)
+	return fmt.Sprintf("source_path: %s\n target_path: %s\n target_host: %s\n target_port: %d\n target_healthcheck_path: %s", rule.Spath, rule.Tpath, rule.Thost, rule.Tport, rule.HcPath)
 }
 
 type ConfigGlobal struct {
@@ -52,6 +53,9 @@ func ValidatePassRule(rule *ProxyPassRule) error {
 	}
 	if rule.Tport == 0 {
 		return fmt.Errorf("invalid proxy_pass: missing 'target_port' field or field is 0; rule: %s", rule.ToString())
+	}
+	if rule.HcPath == "" {
+		return fmt.Errorf("invalid proxy_pass: missing 'target_healthcheck_path' field; rule: %s", rule.HcPath)
 	}
 
 	return nil

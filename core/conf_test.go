@@ -17,8 +17,8 @@ func TestConfigPassRules(t *testing.T) {
 	}
 
 	expected := []ProxyPassRule{
-		{Spath: "/api", Tpath: "/", Thost: "127.0.0.1", Tport: 8000},
-		{Spath: "/users", Tpath: "/users", Thost: "10.0.0.1", Tport: 9000},
+		{Spath: "/api", Tpath: "/", Thost: "127.0.0.1", Tport: 8000, HcPath: "/health"},
+		{Spath: "/users", Tpath: "/users", Thost: "10.0.0.1", Tport: 9000, HcPath: "/health"},
 	}
 
 	for i := range expected {

@@ -7,9 +7,11 @@ source_path = "/api"
 target_path = "/"
 target_port = 8000
 target_host = "127.0.0.1"
+target_healthcheck_path = "/health"
 
 [[proxy_pass]]
 source_path = "/users"
 target_path = "/users"
 target_port = 9000
 target_host = "10.0.0.1"
+target_healthcheck_path = "/health"
