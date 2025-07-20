@@ -18,7 +18,13 @@ func (rule *ProxyPassRule) ToString() string {
 	return fmt.Sprintf("source_path: %s, target_path: %s, target_addr: %s, target_port: %d", rule.Spath, rule.Tpath, rule.Taddr, rule.Tport)
 }
 
+type ConfigGlobal struct {
+	Listener_addr string `toml:"listener_address"`
+	Listener_port int    `toml:"listener_port"`
+}
+
 type Config struct {
+	Global    ConfigGlobal    `toml:"global"`
 	PassRules []ProxyPassRule `toml:"proxy_pass"`
 }
 
@@ -61,8 +67,10 @@ func (conf *Config) Print() {
 	}
 
 	fmt.Println("[config]")
+	fmt.Printf("[global.listener_addr] = %s\n", conf.Global.Listener_addr)
+	fmt.Printf("[global.listener_port] = %d\n", conf.Global.Listener_port)
 	fmt.Println("[proxy pass rules]")
 	for i, rule := range conf.PassRules {
-		fmt.Printf("rule: %d: %+v\n", i+1, rule)
+		fmt.Printf("rule %d: %s\n", i+1, rule.ToString())
 	}
 }

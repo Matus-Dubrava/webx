@@ -16,4 +16,5 @@ func main() {
 	}
 
 	conf.Print()
+
 }
