@@ -1,7 +1,7 @@
 [global]
 listener_host = "127.0.0.1"
 listener_port = 8080
-ping_interval = 10
+ping_interval = 5
 
 [[proxy_pass]]
 source_path = "/api"
